@@ -2,22 +2,23 @@
 
 # Stack
 
-A real-time chat application built with Next.js (frontend) and Express.js (backend), using Socket.io for live messaging and MongoDB for persistence.
+A real-time chat application built with Next.js (frontend) and Express.js (backend), using Socket.IO for live messaging and MongoDB for persistence.
 
-*This is the repo containing the frontend part built on Next js*
+This repo contains both frontend and backend code in separate folders:
 
-Checkout the backend [**here**](https://github.com/sizan14789/stack-server)
+* frontend/ → Next.js app
+
+* backend/ → Express.js server
 
 --- 
 
-### Live Link
+### 🌐 Live Demo
 
 [**Click here**](https://stack-sizan.vercel.app) or copy and paste https://stack-sizan.vercel.app/login
 
 <br />
 
 ---
-
 
 ### Preview
 
@@ -63,29 +64,50 @@ Checkout the backend [**here**](https://github.com/sizan14789/stack-server)
 
 ### ⚙️ Installation & Setup (Frontend)
 
-<span style="color: #E81727">**DO NOT SKIP!!!**</span> Set up the _server_  from [**here**](https://github.com/sizan14789/stack-server) first. Follow the readme there.
-
-#### Clone the frontend repo:
+#### Clone the repo:
 
 ```
 https://github.com/sizan14789/stack.git
 ```
 #### Then set up the *_.env_* file
 
+Frontend
+
 ```ini
 NEXT_PUBLIC_API_URL= http://localhost:3000
-CLOUDINARY_CLOUD_NAME= your cloud name
+CLOUDINARY_CLOUD_NAME= your cloud name 
+
+# not putting cloud name is also fine if u don't plan to upload profile pics
+```
+Backend
+
+```ini
+PORT=3001
+SERVER_URL="http://localhost:3001"
+FRONTEND_URL="http://localhost:3000"
+
+STAGE='dev'
+
+JWT_SECRET='1705'
+
+MONGO_URL=your database url
+
+# use local database for dev purposes
+
 ```
 #### Install modules
 ```
-npm i
+npm run install
 ```
-#### Run
+#### Run on terminal 1
 ```
-npm run dev
+npm run dev:frontend 
 ```
 
-#### _This is assuming that you have the server set up properly. If you do not, then set it up first!_
+#### Run on terminal 2
+```
+npm run dev:server
+```
 
 Then open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 

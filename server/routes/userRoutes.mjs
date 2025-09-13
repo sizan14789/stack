@@ -64,9 +64,6 @@ router.put("/api/users", addUserId, async (req, res) => {
       _id: req.userId
     }
 
-    console.log("---");
-    console.log(payload);
-
     const jwtToken = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });

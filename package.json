@@ -1,0 +1,23 @@
+{
+  "name": "stack",
+  "version": "1.0.0",
+  "description": "A real-time chat application built with Next.js (frontend) and Express.js (backend), using Socket.io for live messaging and MongoDB for persistence.",
+  "homepage": "https://github.com/sizan14789/stack#readme",
+  "bugs": {
+    "url": "https://github.com/sizan14789/stack/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sizan14789/stack.git"
+  },
+  "license": "ISC",
+  "author": "sizan",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install": "cd frontend && npm i && cd ../server && npm i",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:server": "cd server && npm run dev"
+  }
+}

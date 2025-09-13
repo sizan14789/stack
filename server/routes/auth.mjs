@@ -135,7 +135,6 @@ router.get("/api/auth/token", async (req, res) => {
     if (!user) {
       return res.status(400).json({ error: "Invalid token" });
     }
-    console.log(user);
     
     delete user.iat;
     delete user.exp;

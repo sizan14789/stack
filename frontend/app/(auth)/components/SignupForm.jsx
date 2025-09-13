@@ -39,7 +39,7 @@ export default function SignupForm() {
         router.push('/');
         router.refresh()
       } else {
-        console.log(res);
+        // console.log(res);
         // toast.error("");
       }
     } catch (error) {
