@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --text-primary: #1A1A1A;
+  --text-secondary: #555555;
+  --chat-bg: #E8FFD7;
+  --border: #CCCCCC;
+  --accent: #3E5F44;
+}
+
+.dark {
+  --background: #121212;
+  --text-primary: #E0E0E0;
+  --text-secondary: #B0B0B0;
+  --chat-bg: #3E5F44;
+  --border: #444444;
+  --accent: #E8FFD7;
+}
+
+body {
+  background: var(--background);
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.page{
+  @apply grow min-w-svw flex flex-col px-4;
+}
+
+.box{
+  @apply max-w-[90rem] w-full mx-auto;
+}
+
+.text-secondary{
+  @apply text-xs text-[var(--text-secondary)] font-normal;
+}
+
+.button-primary{
+  @apply text-xs sm:text-sm cursor-pointer flex justify-center items-center border-1 border-[var(--border)] w-[5rem] sm:w-[6rem] py-2 rounded-md text-[var(--text-primary)] bg-[var(--background)] hover:bg-[var(--text-primary)] hover:text-[var(--background)] duration-200;
+}
+
+.button-secondary{
+  @apply text-xs sm:text-sm cursor-pointer flex justify-center items-center border-1 border-[var(--border)] w-[5rem] sm:w-[6rem] py-2 rounded-md bg-[var(--text-primary)] text-[var(--background)] hover:text-[var(--text-primary)] hover:bg-[var(--background)] duration-200;
+}
+
+.input-field{
+  @apply px-4 py-4 text-xs sm:text-sm outline-none border-1 border-[var(--border)] rounded-md focus:border-[var(--accent)];
+}
