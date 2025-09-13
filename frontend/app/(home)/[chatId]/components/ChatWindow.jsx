@@ -58,7 +58,7 @@ export default function ChatWindow() {
                   {sender.imageUrl ? (
                     <Image
                       src={sender.imageUrl}
-                      alt=" "
+                      alt="profile_pic"
                       height={100}
                       width={100}
                       className="object-cover h-full w-full"

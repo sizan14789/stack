@@ -27,7 +27,7 @@ export default function PartnerNavbar() {
             {partner.imageUrl ? (
               <Image
                 src={partner.imageUrl}
-                alt=""
+                alt="profile_pic"
                 height={100}
                 width={100}
                 className="object-cover w-full h-full"

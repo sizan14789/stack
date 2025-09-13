@@ -127,7 +127,7 @@ export default function AccountInfo() {
                   {file ? (
                     <img
                       src={URL.createObjectURL(file)}
-                      alt=" "
+                      alt="profile_pic"
                       className="object-cover w-full h-full"
                     />
                   ) : (
@@ -138,7 +138,7 @@ export default function AccountInfo() {
                       {localUser.imageUrl ? (
                         <Image
                           src={localUser.imageUrl}
-                          alt=" "
+                          alt="profile_pic"
                           height={200}
                           width={200}
                           priority

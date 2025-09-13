@@ -1,6 +1,4 @@
-## 📌 Title & Description
-
-# Stack
+# 📌 Stack - Real-Time Chat App
 
 A real-time chat application built with Next.js (frontend) and Express.js (backend), using Socket.IO for live messaging and MongoDB for persistence.
 

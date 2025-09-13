@@ -100,7 +100,7 @@ export default function NewContactList() {
                   {curContact.imageUrl ? (
                     <Image
                       src={curContact.imageUrl}
-                      alt=" "
+                      alt="profile_pic"
                       height={100}
                       width={100}
                       priority

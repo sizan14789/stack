@@ -30,7 +30,7 @@ export default function ChatListCard({ curChat }) {
             {otherPerson.imageUrl ? (
                     <Image
                       src={otherPerson.imageUrl}
-                      alt=" "
+                      alt="profile_pic"
                       width={100}
                       priority
                       height={100}
