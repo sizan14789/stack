@@ -4,13 +4,13 @@ A real-time chat application built with Next.js (frontend) and Express.js (backe
 
 This repo contains both frontend and backend code in separate folders:
 
-* frontend/ → Next.js app
+- frontend/ → Next.js app
 
-* backend/ → Express.js server
+- backend/ → Express.js server
 
---- 
+---
 
-### 🌐 Live Demo
+## 🌐 Live Demo
 
 [**Click here**](https://stack-sizan.vercel.app) or copy and paste https://stack-sizan.vercel.app/login
 
@@ -18,31 +18,45 @@ This repo contains both frontend and backend code in separate folders:
 
 ---
 
-### Preview
+## Preview
 
-*To be added*
+### Desktop
 
-<br />
+<p align="center" >
+  <img src="./frontend/assets/loginDesktop.png" alt="Login Desktop" width="75%" />
+  <img src="./frontend/assets/homepageDesktop.png" alt="Homepage Desktop" width="75%" />
+  <img src="./frontend/assets/conversationDesktop.png" alt="Conversation Desktop" width="75%" />
+</p>
 
----
+### Mobile
 
-### 🚀 Features
-
-* 🔥 Real-time messaging with Socket.IO
-
-* 👤 User authentication (JWT )
-
-* 💬 Private chats
-
-* 📱 Responsive UI with TailwindCSS
-
-* 🖼️ Image/file sharing (Upcoming)
+<p align="center">
+  <img src="./frontend/assets/loginMobile.png" alt="Login Mobile" width="30%" />
+  <img src="./frontend/assets/homepageMobile.png" alt="Homepage Mobile" width="30%" />
+  <img src="./frontend/assets/conversationMobile.png" alt="Conversation Mobile" width="30%" />
+</p>
 
 <br />
 
 ---
 
-### 🛠️ Tech Stack
+## 🚀 Features
+
+- 🔥 Real-time messaging with Socket.IO
+
+- 👤 User authentication (JWT )
+
+- 💬 Private chats
+
+- 📱 Responsive UI with TailwindCSS
+
+- 🖼️ Image/file sharing (Upcoming)
+
+<br />
+
+---
+
+## 🛠️ Tech Stack
 
 **Frontend:** Next.js, React, TailwindCSS
 
@@ -52,7 +66,7 @@ This repo contains both frontend and backend code in separate folders:
 
 **Realtime:** Socket.IO
 
-**Auth:** JWT 
+**Auth:** JWT
 
 **Deployment:** Vercel + Render
 
@@ -60,23 +74,25 @@ This repo contains both frontend and backend code in separate folders:
 
 ---
 
-### ⚙️ Installation & Setup (Frontend)
+## ⚙️ Installation & Setup (Frontend)
 
 #### Clone the repo:
 
 ```
 https://github.com/sizan14789/stack.git
 ```
-#### Then set up the *_.env_* file
+
+#### Then set up the _*.env*_ file
 
 Frontend
 
 ```ini
 NEXT_PUBLIC_API_URL= http://localhost:3000
-CLOUDINARY_CLOUD_NAME= your cloud name 
+CLOUDINARY_CLOUD_NAME= your cloud name
 
 # not putting cloud name is also fine if u don't plan to upload profile pics
 ```
+
 Backend
 
 ```ini
@@ -93,19 +109,23 @@ MONGO_URL=your database url
 # use local database for dev purposes
 
 ```
+
 #### Install modules
+
 ```
 npm run install
 ```
+
 #### Run on terminal 1
+
 ```
-npm run dev:frontend 
+npm run dev:frontend
 ```
 
 #### Run on terminal 2
+
 ```
 npm run dev:server
 ```
 
 Then open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-

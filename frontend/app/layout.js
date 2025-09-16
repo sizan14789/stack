@@ -22,9 +22,6 @@ export default async function RootLayout({ children }) {
 
   return (
     <html lang="en">
-    <head>
-      <link rel="icon" href="favicon_upscaled.png" />
-    </head>
       <AppProvider>
         <body
           className={`${poppins.className} flex flex-col min-h-svh min-w-svw ${
