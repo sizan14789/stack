@@ -102,7 +102,7 @@ FRONTEND_URL="http://localhost:3000"
 
 STAGE='dev'
 
-JWT_SECRET='1705'
+JWT_SECRET= your secret
 
 MONGO_URL=your database url
 
