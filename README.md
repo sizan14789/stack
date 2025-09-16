@@ -12,7 +12,7 @@ This repo contains both frontend and backend code in separate folders:
 
 ## 🌐 Live Demo
 
-[**Click here**](https://stack-sizan.vercel.app) or copy and paste https://stack-sizan.vercel.app/login
+[**Click here**](https://stack-sizan.vercel.app) or copy and paste https://stack-sizan.vercel.app
 
 <br />
 
