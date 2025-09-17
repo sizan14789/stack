@@ -7,7 +7,7 @@ export default function NewContact() {
 
   return (
     <div className="p-4 flex flex-col gap-3">
-      <p className="text-[var(--text-secondary)] !text-xs">Add new contact</p>
+      <label className="text-[var(--text-secondary)] !text-xs">Add new contact</label>
       <input
         type="search"
         name="search"

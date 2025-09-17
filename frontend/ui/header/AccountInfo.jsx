@@ -20,7 +20,6 @@ export default function AccountInfo() {
     setFile(e.target.files[0]);
   };
 
-  // todo fix this
   const handleImageSave = async () => {
     setAccountModal(false);
     if (!file) return;

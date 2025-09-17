@@ -15,7 +15,6 @@ const getChats = async (token) => {
       return data;
     }
   } catch (e) {
-    // todo add some way to identify server down/ fetch issue
     console.log(e.message);
   }
 };

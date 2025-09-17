@@ -27,7 +27,7 @@ export default function ChatWindow() {
     return (
       <div className="flex flex-col-reverse px-4 py-2 overflow-y-auto overflow-x-hidden gap-1 grow">
         {localMessages.map((curMessage, index) => {
-          const { _id, chat, text, read, createdAt } = curMessage;
+          const { _id, chat, text, read, createdAt, isImage } = curMessage;
           const senderDummy = curMessage.sender;
           const sender = senderDummy
             ? senderDummy
@@ -98,7 +98,17 @@ export default function ChatWindow() {
                 bg-[var(--chat-bg)] duration-150`}
               >
                 <p className="break-words">
-                  <span>{text}</span>
+                  {isImage ? (
+                    <Image
+                      src={text}
+                      height={400}
+                      width={400}
+                      alt="text image"
+                      className="w-[8rem] h-[8rem] sm:w-[10rem] sm:h-[10rem] rounded-xl overflow-hidden object-cover"
+                    ></Image>
+                  ) : (
+                    <span>{text}</span>
+                  )}
                   <span className="float-right mt-2 ml-4 mb-1 !text-[.5rem]  sm:!text-[.6rem] self-end whitespace-nowrap text-secondary">
                     {textTime}
                   </span>
