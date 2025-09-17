@@ -1,6 +1,5 @@
 import { useAppContext } from "@/context/AppContext";
 import { useChatContext } from "@/context/ChatLayoutContext";
-import Blank from "@/ui/placeholder/Blank";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -15,7 +14,7 @@ export default function PartnerNavbar() {
   if (!partner)
     partner = { username: "Stack User", avatarBg: "gray", imageUrl: null };
 
-  if (!localUser) return <Blank />;
+  if (!localUser) return <div className="min-h-[4rem] sm:min-h-[5rem] "></div>;
   else
     return (
       <div className="h-[4rem] sm:h-[5rem] p-4 flex shadow-[0_3px_3px_-3px_#00000024] justify-between items-center">

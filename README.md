@@ -88,7 +88,7 @@ Frontend
 
 ```ini
 NEXT_PUBLIC_API_URL= http://localhost:3000
-CLOUDINARY_CLOUD_NAME= your cloud name
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME= your cloud name
 
 # not putting cloud name is also fine if u don't plan to upload profile pics
 ```
@@ -102,7 +102,7 @@ FRONTEND_URL="http://localhost:3000"
 
 STAGE='dev'
 
-JWT_SECRET='1705'
+JWT_SECRET=your secret
 
 MONGO_URL=your database url
 

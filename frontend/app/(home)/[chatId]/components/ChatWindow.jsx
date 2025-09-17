@@ -1,9 +1,9 @@
 import { useAppContext } from "@/context/AppContext";
 import { useChatContext } from "@/context/ChatLayoutContext";
-import Blank from "@/ui/placeholder/Blank";
 import { useEffect } from "react";
 import { format } from "date-fns";
 import Image from "next/image";
+import Loading from "@/app/(home)/loading";
 
 export default function ChatWindow() {
   const { socket, localUser } = useAppContext();
@@ -19,7 +19,7 @@ export default function ChatWindow() {
     return () => socket.off("text received");
   }, [socket]);
 
-  if (!(localUser && localMessages)) return <Blank />;
+  if (!(localUser && localMessages)) return <Loading />;
   else {
     let prevMessageSenderId;
     let nextMessageSenderId;

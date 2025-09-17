@@ -56,6 +56,8 @@ export default function NewContactList() {
     }
   };
 
+  if (!searchContactsList) <Loading />
+
   if (searchContactsList) {
     return (
       <>

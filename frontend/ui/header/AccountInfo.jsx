@@ -37,14 +37,15 @@ export default function AccountInfo() {
 
     try {
       const res = await fetch(
-        `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload`,
+        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
         {
           method: "POST",
           body: formData,
         }
       );
       if (res.status !== 200) {
-        toast.error("Failed to upload");
+        console.log(res);
+        toast.error("Failed to upload to cloudinary");
         return;
       }
       const data = await res.json();
@@ -109,13 +110,13 @@ export default function AccountInfo() {
           Account
         </button>
         <div
-          className={`absolute top-0 left-0 h-svh w-svw pb-28 flex justify-center z-20 items-center ${
-            accountModal ? "" : "hidden"
+          className={`absolute top-0 left-0 h-svh w-svw pb-28 flex justify-center z-20 items-center duration-200 ease-in-out ${
+            accountModal ? "scale-100" : "scale-0"
           }`}
           onClick={() => handleModalClose(false)}
         >
           <div
-            className="p-16 pb-10 border-1 rounded-xl border-[var(--border)] flex flex-col gap-4 bg-[var(--background)] relative"
+            className="p-16 pb-10 border-1 rounded-xl border-[var(--border)] flex flex-col gap-4 bg-[var(--background)] relative opacity-100"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex flex-col items-center gap-2">
@@ -176,7 +177,7 @@ export default function AccountInfo() {
                   Delete User
                 </button>
                 <button
-                  className="button-secondary !w-[8rem]"
+                  className="button-secondary !w-[8rem] active:!scale-90"
                   onClick={handleImageSave}
                 >
                   Save

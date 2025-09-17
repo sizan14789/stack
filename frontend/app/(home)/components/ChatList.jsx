@@ -1,8 +1,11 @@
+import Loading from "@/app/(home)/loading";
 import ChatListCard from "./ChatListCard";
 import { useAppContext } from "@/context/AppContext";
 
 export default function ChatList() {
   const { localChatsList } = useAppContext()
+
+  if (!localChatsList) <Loading />
 
   if (localChatsList)
     return (

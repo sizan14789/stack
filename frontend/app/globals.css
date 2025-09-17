@@ -37,11 +37,11 @@ body {
 }
 
 .button-primary{
-  @apply text-xs sm:text-sm cursor-pointer flex justify-center items-center border-1 border-[var(--border)] w-[5rem] sm:w-[6rem] py-2 rounded-md text-[var(--text-primary)] bg-[var(--background)] hover:bg-[var(--text-primary)] hover:text-[var(--background)] duration-200;
+  @apply text-xs sm:text-sm cursor-pointer flex justify-center items-center border-1 border-[var(--border)] w-[5rem] sm:w-[6rem] py-2 rounded-md text-[var(--text-primary)] bg-[var(--background)] hover:bg-[var(--text-primary)] hover:text-[var(--background)] duration-200 active:!scale-90;
 }
 
 .button-secondary{
-  @apply text-xs sm:text-sm cursor-pointer flex justify-center items-center border-1 border-[var(--border)] w-[5rem] sm:w-[6rem] py-2 rounded-md bg-[var(--text-primary)] text-[var(--background)] hover:text-[var(--text-primary)] hover:bg-[var(--background)] duration-200;
+  @apply text-xs sm:text-sm cursor-pointer flex justify-center items-center border-1 border-[var(--border)] w-[5rem] sm:w-[6rem] py-2 rounded-md bg-[var(--text-primary)] text-[var(--background)] hover:text-[var(--text-primary)] hover:bg-[var(--background)] duration-200 active:!scale-90;
 }
 
 .input-field{
