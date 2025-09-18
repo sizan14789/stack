@@ -34,6 +34,8 @@ export default function AccountInfo() {
     formData.append("file", compressed);
     formData.append("upload_preset", "profile_pic");
 
+    const load = toast.loading("Uploading...")
+
     try {
       const res = await fetch(
         `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
@@ -64,12 +66,12 @@ export default function AccountInfo() {
       });
 
       if (updateRes.status === 201) {
-        toast.success("Image updated");
+        toast.success("Image updated", { id:load });
       } else {
-        toast.error("Upload failed, reload to see prev profile pic");
+        toast.error("Upload failed, reload to see prev profile pic", { id:load });
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.message, {id:load});
     }
   };
 

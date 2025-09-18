@@ -66,7 +66,7 @@ export default function ChatBox() {
       );
       if (res.status !== 200) {
         // console.log(res);
-        toast.error("Failed to upload to cloudinary");
+        toast.error("Failed to upload to cloudinary", { id });
       } else {
         const data = await res.json();
         toast.success("Uploaded", { id })
@@ -84,7 +84,6 @@ export default function ChatBox() {
 
     const handleDatabaseSync = async () => {
       if (!imageUrl) {
-        toast.error("Didn't get the image URL internally");
         return;
       }
 
@@ -136,7 +135,7 @@ export default function ChatBox() {
         };
         setLocalMessages((prev) => [newMessage, ...prev]);
       } else {
-        toast.error("Sending failed at client level");
+        console.log("Sending image at client level");
       }
     };
 
@@ -278,13 +277,13 @@ export default function ChatBox() {
         </div>
         <form className="flex gap-4 justify-self-end" onSubmit={handleSending}>
           {sendingImage ? (
-            <div className="relative">
+            <div className="relative max-h-[8rem] sm:max-h-[9rem]">
               <Image
                 src={sendingImage.url}
                 height={200}
                 width={200}
                 alt="selecting pic"
-                className="object-cover rounded-2xl"
+                className="object-cover rounded-2xl h-full"
               />
               <button
                 className="absolute text-white font-bold top-2 right-4 cursor-pointer"
