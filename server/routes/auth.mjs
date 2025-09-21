@@ -13,13 +13,12 @@ router.post(
   body("email").isEmail(),
   body("password").isLength({ min: 6 }),
   async (req, res) => {
-    
     const validationError = validationResult(req);
     if (!validationError.isEmpty())
       return res.status(400).json({ error: "Invalid credentials" });
 
     const { username, email, password } = req.body;
-    
+
     const user = await User.findOne({ $or: [{ email }, { username }] });
     if (user) return res.status(400).json({ error: "User already exists" });
 
@@ -52,12 +51,16 @@ router.post(
         avatarBg: newUser.avatarBg,
         username: newUser.username,
         email: newUser.email,
-        imageUrl: newUser.imageUrl
+        imageUrl: newUser.imageUrl,
       };
-      
-      const jwtToken = jwt.sign(responseUser, process.env.JWT_SECRET, {
-        expiresIn: "1d",
-      });
+
+      const jwtToken = jwt.sign(
+        { _id: responseUser._id },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: "1d",
+        }
+      );
 
       // Server domain: Client side auto authing info
       res.cookie("auth_token", jwtToken, {
@@ -102,13 +105,17 @@ router.post("/api/auth/login", async (req, res) => {
     _id: user._id,
     username: user.username,
     email: user.email,
-    imageUrl: user.imageUrl
+    imageUrl: user.imageUrl,
   };
 
   try {
-    const jwtToken = jwt.sign(responseUser, process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
+    const jwtToken = jwt.sign(
+      { _id: responseUser._id },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1d",
+      }
+    );
 
     // Server domain: Client side auto authing info
     res.cookie("auth_token", jwtToken, {
@@ -121,7 +128,7 @@ router.post("/api/auth/login", async (req, res) => {
     console.log(error);
     return res.status(400).json({ error: "Could not set cookie" });
   }
-  
+
   return res.status(200).json(responseUser);
 });
 
@@ -131,13 +138,21 @@ router.get("/api/auth/token", async (req, res) => {
   if (!token) return res.status(400).json({ error: "No token" });
 
   try {
-    const user = jwt.verify(token, process.env.JWT_SECRET);
-    if (!user) {
+    const jwtUser = jwt.verify(token, process.env.JWT_SECRET);
+    if (!jwtUser) {
       return res.status(400).json({ error: "Invalid token" });
     }
-    
-    delete user.iat;
-    delete user.exp;
+
+    const user = await User.findById(jwtUser._id, {
+      _id: 1,
+      imageUrl: 1,
+      username: 1,
+      email: 1,
+      avatarBg: 1,
+    });
+    if (!user) {
+      return res.status(400).json({ error: "User not in database" });
+    }
 
     return res.status(200).json(user);
   } catch (error) {
@@ -167,7 +182,7 @@ router.get("/api/auth/logout", async (req, res) => {
     return res.status(200).json({ message: "Logged out" });
   } catch (error) {
     console.log(error);
-    
+
     return res.status(400).json({ error: "JWT malformed" });
   }
 });

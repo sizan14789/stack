@@ -32,12 +32,16 @@ router.post("/api/messages", addUserId, async (req, res) => {
       "_id avatarBg username imageUrl"
     );
     
+    console.log(socketMap)
+
     // socket response
     const chat = await Chat.findById(emittingMessage.chat);
+
     const receiver = chat.participants.find(
-      (id) => senderId !== id.toString()
+      (id) => senderId.toString() !== id.toString()
     );
     const receiverId = receiver.toString();
+    
     if (socketMap.has(receiverId)) {
       io.to(socketMap.get(receiverId)).emit("text received", emittingMessage);
     }

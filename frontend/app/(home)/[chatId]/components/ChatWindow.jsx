@@ -52,7 +52,7 @@ export default function ChatWindow() {
             >
               {prevMessageSenderId !== sender._id ? (
                 <figure
-                  className="h-[2rem] sm:h-[2.5rem] min-w-[2rem] sm:min-w-[2.5rem] flex justify-center items-center rounded-full overflow-hidden"
+                  className="h-[2rem] sm:h-[2.5rem] min-w-[2rem] sm:min-w-[2.5rem] max-w-[2rem] sm:max-w-[2.5rem] flex justify-center items-center rounded-full overflow-hidden"
                   style={{ backgroundColor: sender.avatarBg }}
                 >
                   {sender.imageUrl ? (
