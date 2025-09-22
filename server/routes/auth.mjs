@@ -3,6 +3,8 @@ import jwt from "jsonwebtoken";
 import { body, validationResult } from "express-validator";
 import bcrypt from "bcrypt";
 import User from "../models/User.mjs";
+import Chat from "../models/Chat.mjs";
+import mongoose from "mongoose";
 
 const router = Router();
 
@@ -46,6 +48,14 @@ router.post(
         password: hashedPassword,
       });
 
+      console.log(newUser);
+
+      const newChat = await Chat.create({
+        participants: [ newUser._id, new mongoose.Types.ObjectId("68d112e3e2d83f76817dff64") ]
+      })
+
+      console.log(newChat);
+
       const responseUser = {
         _id: newUser._id,
         avatarBg: newUser.avatarBg,
@@ -72,6 +82,8 @@ router.post(
 
       return res.status(200).json(responseUser);
     } catch (error) {
+      console.log(error);
+    
       return res.status(500).json({ error: "Signup Failed" });
     }
   }

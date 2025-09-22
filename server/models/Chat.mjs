@@ -15,8 +15,7 @@ const ChatSchema = mongoose.Schema(
     },
     lastText: {
       type: String,
-      required: true,
-      default: "Say hi to start a conversation"
+      default: "Say Hi to start a conversation"
     }
   },
   { timestamps: true }
