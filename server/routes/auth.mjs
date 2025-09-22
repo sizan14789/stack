@@ -15,12 +15,12 @@ router.post(
   async (req, res) => {
     const validationError = validationResult(req);
     if (!validationError.isEmpty())
-      return res.status(400).json({ error: "Invalid credentials" });
+      return res.status(400).json({ error: "Validation error" });
 
     const { username, email, password } = req.body;
 
     const user = await User.findOne({ $or: [{ email }, { username }] });
-    if (user) return res.status(400).json({ error: "User already exists" });
+    if (user) return res.status(409).json({ error: "User already exists" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const avatarColors = [
@@ -72,7 +72,7 @@ router.post(
 
       return res.status(200).json(responseUser);
     } catch (error) {
-      return res.status(400).json({ error: "Signup Failed" });
+      return res.status(500).json({ error: "Signup Failed" });
     }
   }
 );
@@ -92,10 +92,10 @@ router.post("/api/auth/login", async (req, res) => {
   const { username, password } = req.body;
 
   const user = await User.findOne({ $or: [{ email: username }, { username }] });
-  if (!user) return res.status(400).json({ error: "No such user found" });
+  if (!user) return res.status(404).json({ error: "No such user found" });
 
   if (!(await bcrypt.compare(password, user.password)))
-    return res.status(400).json({ error: "Wrong password" });
+    return res.status(401).json({ error: "Wrong password" });
 
   // if (password !== user.password)
   //   return res.status(400).json({ error: "Wrong password" });
@@ -126,7 +126,7 @@ router.post("/api/auth/login", async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(400).json({ error: "Could not set cookie" });
+    return res.status(500).json({ error: "Could not set cookie" });
   }
 
   return res.status(200).json(responseUser);
@@ -140,7 +140,7 @@ router.get("/api/auth/token", async (req, res) => {
   try {
     const jwtUser = jwt.verify(token, process.env.JWT_SECRET);
     if (!jwtUser) {
-      return res.status(400).json({ error: "Invalid token" });
+      return res.status(401).json({ error: "Invalid token" });
     }
 
     const user = await User.findById(jwtUser._id, {
@@ -151,12 +151,12 @@ router.get("/api/auth/token", async (req, res) => {
       avatarBg: 1,
     });
     if (!user) {
-      return res.status(400).json({ error: "User not in database" });
+      return res.status(401).json({ error: "User not in database" });
     }
 
     return res.status(200).json(user);
   } catch (error) {
-    return res.status(400).json({ error: "JWT malformed" });
+    return res.status(500).json({ error: "JWT malformed" });
   }
 });
 
@@ -168,7 +168,7 @@ router.get("/api/auth/logout", async (req, res) => {
   try {
     const user = jwt.verify(token, process.env.JWT_SECRET);
     if (!user) {
-      return res.status(400).json({ error: "Invalid token" });
+      return res.status(401).json({ error: "Invalid token" });
     }
 
     // Server domain: Client side auto authing info
@@ -182,8 +182,7 @@ router.get("/api/auth/logout", async (req, res) => {
     return res.status(200).json({ message: "Logged out" });
   } catch (error) {
     console.log(error);
-
-    return res.status(400).json({ error: "JWT malformed" });
+    return res.status(500).json({ error: "JWT malformed" });
   }
 });
 

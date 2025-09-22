@@ -14,7 +14,7 @@ router.get("/api/messages/:chatId", verifyToken, async (req, res) => {
       .populate("sender", "_id avatarBg username imageUrl");
     return res.status(200).json(messages);
   } catch (error) {
-    return res.status(400).json({ error: "Messages fetching failed" });
+    return res.status(500).json({ error: "Messages fetching failed" });
   }
 });
 
@@ -32,8 +32,6 @@ router.post("/api/messages", addUserId, async (req, res) => {
       "_id avatarBg username imageUrl"
     );
     
-    console.log(socketMap)
-
     // socket response
     const chat = await Chat.findById(emittingMessage.chat);
 
@@ -49,7 +47,7 @@ router.post("/api/messages", addUserId, async (req, res) => {
     // http response
     return res.status(201).json(createdMessage);
   } catch (error) {
-    return res.status(400).json({ error: "Messages fetching failed" });
+    return res.status(500).json({ error: "Messages fetching failed" });
   }
 });
 

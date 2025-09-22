@@ -12,7 +12,7 @@ router.get("/api/chats", addUserId, async (req, res) => {
       .populate("participants", "_id avatarBg username imageUrl");
     res.status(200).json(chats);
   } catch (error) {
-    return res.status(400).json({ error: "Internal error" });
+    return res.status(500).json({ error: "Internal error" });
   }
 });
 
@@ -31,7 +31,7 @@ router.post("/api/chats", addUserId, async (req, res) => {
     );
     res.status(201).json(chat);
   } catch (error) {
-    return res.status(400).json({ error: "Internal error" });
+    return res.status(500).json({ error: "Internal error" });
   }
 });
 
@@ -43,10 +43,10 @@ router.get("/api/chats/:chatId", verifyToken, async (req, res) => {
       "_id avatarBg username imageUrl"
     );
 
-    if (!chat) return res.status(400).json({ error: "Invalid chatId" });
+    if (!chat) return res.status(404).json({ error: "Invalid chatId" });
     res.status(200).json(chat);
   } catch (error) {
-    return res.status(400).json({ error: "Invalid chatId" });
+    return res.status(500).json({ error: "Invalid chatId" });
   }
 });
 
@@ -59,9 +59,9 @@ router.put("/api/chats/update/:chatId", verifyToken, async (req, res) => {
       },
       { new: true }
     );
-    res.status(200).json(updatedChat);
+    res.status(201).json(updatedChat);
   } catch (error) {
-    return res.status(400).json({ error: "Sync Failed" });
+    return res.status(500).json({ error: "Sync Failed" });
   }
 });
 

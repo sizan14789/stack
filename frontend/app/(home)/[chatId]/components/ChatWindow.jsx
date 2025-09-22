@@ -72,20 +72,31 @@ export default function ChatWindow() {
                 <figure className="h-[2rem] sm:h-[2.5rem] aspect-square"></figure>
               )}
 
-              <div
-                className={`text-xs border-[.5px] border-[var(--border)] px-4 pt-3 pb-1 rounded-md ${
-                  selfSent
-                    ? "rounded-bl-4xl rounded-tl-4xl"
-                    : "rounded-br-4xl rounded-tr-4xl"
-                } ${
-                  selfSent
-                    ? prevMessageSenderId === sender._id
+              {isImage ? (
+                <div className="h-full p-[2px] bg-[var(--accent)] overflow-hidden rounded-2xl">
+                  <Image
+                    src={text}
+                    height={400}
+                    width={400}
+                    alt="text image"
+                    className="w-[8rem] h-[8rem] sm:w-[10rem] sm:h-[10rem] rounded-xl overflow-hidden object-cover"
+                  ></Image>
+                </div>
+              ) : (
+                <div
+                  className={`text-xs border-[.5px] border-[var(--border)] px-4 pt-3 pb-1 rounded-md ${
+                    selfSent
+                      ? "rounded-bl-4xl rounded-tl-4xl"
+                      : "rounded-br-4xl rounded-tr-4xl"
+                  } ${
+                    selfSent
+                      ? prevMessageSenderId === sender._id
+                        ? ""
+                        : "rounded-br-4xl"
+                      : prevMessageSenderId === sender._id
                       ? ""
-                      : "rounded-br-4xl"
-                    : prevMessageSenderId === sender._id
-                    ? ""
-                    : "rounded-bl-4xl"
-                } 
+                      : "rounded-bl-4xl"
+                  } 
                 ${
                   selfSent
                     ? nextMessageSenderId === sender._id
@@ -96,24 +107,15 @@ export default function ChatWindow() {
                     : "rounded-tl-4xl"
                 }
                 bg-[var(--chat-bg)] duration-150`}
-              >
-                <p className="break-words">
-                  {isImage ? (
-                    <Image
-                      src={text}
-                      height={400}
-                      width={400}
-                      alt="text image"
-                      className="w-[8rem] h-[8rem] sm:w-[10rem] sm:h-[10rem] rounded-xl overflow-hidden object-cover"
-                    ></Image>
-                  ) : (
+                >
+                  <p className="break-words">
                     <span>{text}</span>
-                  )}
-                  <span className="float-right mt-2 ml-4 mb-1 !text-[.5rem]  sm:!text-[.6rem] self-end whitespace-nowrap text-secondary">
-                    {textTime}
-                  </span>
-                </p>
-              </div>
+                    <span className="float-right mt-2 ml-4 mb-1 !text-[.5rem]  sm:!text-[.6rem] self-end whitespace-nowrap text-secondary">
+                      {textTime}
+                    </span>
+                  </p>
+                </div>
+              )}
             </div>
           );
         })}
