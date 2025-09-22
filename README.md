@@ -48,9 +48,11 @@ This repo contains both frontend and backend code in separate folders:
 
 - 💬 Private chats
 
-- 📱 Responsive UI with TailwindCSS
+- 🤖 Ai ChatBot (Chat GPT)
 
-- 🖼️ Image/file sharing (Upcoming)
+- 🖼️ Image/file sharing
+
+- 📱 Responsive UI with TailwindCSS
 
 <br />
 
