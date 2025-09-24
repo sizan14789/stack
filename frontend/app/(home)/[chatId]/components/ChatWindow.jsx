@@ -26,7 +26,7 @@ export default function ChatWindow() {
 
     return (
       <div className="flex flex-col-reverse px-4 py-2 overflow-y-auto overflow-x-hidden gap-1 grow">
-        {localMessages.map((curMessage, index) => {
+        {localMessages.length===0 ? <p className="self-center text-secondary">No messages yet</p> : localMessages.map((curMessage, index) => {
           const { _id, chat, text, read, createdAt, isImage } = curMessage;
           const senderDummy = curMessage.sender;
           const sender = senderDummy

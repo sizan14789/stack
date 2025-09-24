@@ -34,7 +34,6 @@ export default function ChatBox() {
     }
   };
 
-  // todo update ui instant with placeholder
   const handleImageSending = async () => {
     if (!sendingImage) {
       toast("No image");
@@ -132,7 +131,6 @@ export default function ChatBox() {
       }
     };
 
-    // todo identify who sent
     const syncLastTextUi = () => {
       const chatId = localChatInfo._id;
       setLocalChatsList((prev) => {
