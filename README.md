@@ -91,7 +91,7 @@ Frontend
 ```ini
 NEXT_PUBLIC_API_URL= http://localhost:3000
 NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME= your cloud name
-
+NEXT_PUBLIC_AI_ID='68d112e3e2d83f76817dff64'
 # not putting cloud name is also fine if u don't plan to upload profile pics
 ```
 
@@ -99,15 +99,14 @@ Backend
 
 ```ini
 PORT=3001
-SERVER_URL="http://localhost:3001"
 FRONTEND_URL="http://localhost:3000"
 
 STAGE='dev'
-
 JWT_SECRET=your secret
 
 MONGO_URL=your database url
-
+AI_ID='68d112e3e2d83f76817dff64'
+GEMINI_API='AIzaSyAB6llbkCgNNF54Vzfqmp2SlU1q4FJNHl0'
 # use local database for dev purposes
 
 ```

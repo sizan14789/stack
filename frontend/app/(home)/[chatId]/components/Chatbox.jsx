@@ -41,9 +41,19 @@ export default function ChatBox() {
       return;
     }
 
+    const receiver = localChatInfo.participants.find(
+      (cur) => cur._id !== localUser._id
+    );
+
+    if (receiver._id === process.env.NEXT_PUBLIC_AI_ID) {
+      toast.error("Image sending to Chatbot not supported yet")
+      setSendingImage(null);
+      return;     
+    }
+
     setSendingImage(null);
 
-    const id = toast.loading("Uploading...")
+    const id = toast.loading("Uploading...");
 
     const handleImageUpload = async () => {
       const formData = new FormData();
@@ -69,7 +79,7 @@ export default function ChatBox() {
         toast.error("Failed to upload to cloudinary", { id });
       } else {
         const data = await res.json();
-        toast.success("Uploaded", { id })
+        toast.success("Uploaded", { id });
         return data.secure_url;
       }
     };
@@ -172,6 +182,14 @@ export default function ChatBox() {
       return;
     }
 
+    const receiver = localChatInfo.participants.find(
+      (cur) => cur._id !== localUser._id
+    );
+
+    if (receiver._id === process.env.NEXT_PUBLIC_AI_ID) {
+      toast("wait for response please");
+    }
+
     const postBody = {
       chat: localChatInfo._id,
       text: textInput,
@@ -248,7 +266,7 @@ export default function ChatBox() {
       if (res.status === 201) {
         await syncLastText();
       } else {
-        toast.error("Failed to send");
+        toast.error("Failed to send", { id: loadToaster });
       }
     } catch (error) {
       console.log(error.message + "-at ChatBox.jsx");
@@ -257,7 +275,11 @@ export default function ChatBox() {
   };
 
   return (
-    <div className={`border-t-[.5px] border-t-[var(--border)] h-[4rem] sm:min-h-[5rem] p-4 flex ${sendingImage? "h-[9rem] sm:min-h-[10rem]" : "" } `}>
+    <div
+      className={`border-t-[.5px] border-t-[var(--border)] h-[4rem] sm:min-h-[5rem] p-4 flex ${
+        sendingImage ? "h-[9rem] sm:min-h-[10rem]" : ""
+      } `}
+    >
       <div className="flex gap-4 justify-center items-center w-full">
         <div className="flex">
           <label
