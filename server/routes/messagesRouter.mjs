@@ -24,30 +24,40 @@ router.get("/api/messages/:chatId", verifyToken, async (req, res) => {
 router.post("/api/messages", addUserId, async (req, res) => {
   const sendToAi = async () => {
     try {
+      // prepping recent message
+      const recentMessages = await Message.find(
+        { chat: req.body.chat },
+        { sender: 1, text: 1 }
+      )
+        .sort({ createdAt: -1 })
+        .limit(5);
+      recentMessages.reverse();
+
+      const arrayForAi = recentMessages.map((cur) => {
+        return {
+          role: cur.sender.toString() === process.env.AI_ID ? "model" : "user",
+          parts: [{ text: cur.text }],
+        };
+      });
+
+      arrayForAi.push({
+        role: "user",
+        parts: [{ text: req.body?.text }],
+      });
+
       const response = await gemini.models.generateContent({
         model: "gemini-2.5-flash",
-        contents: `${req.body?.text} ---- Note:don't stylize text, break lines or highlight anything at all...keep everything simple text, avoid line breaking in clever way...Imagine yourself as a chat bot.. don't mention anything about the note part in ur response`,
+        systemInstruction: {
+          parts: [
+            {
+              text: "You are a helpful chatbot called Sai. Your response should be to the point. Avoid over-explaining unless the user asks so. Avoid breaking line or highlighting stuff, keep them as passage like as possible",
+            },
+          ],
+        },
+        contents: arrayForAi,
       });
 
-      const aiResponse = await Message.create({
-        chat: req.body?.chat,
-        sender: process.env.AI_ID,
-        text: response.text,
-      });
-
-      const aiSocketResponse = await Message.findById(
-        aiResponse._id
-      ).populate("sender", "_id avatarBg username imageUrl");
-
-      // socket part
-      const userId = req.userId.toString();
-      if (socketMap.has(userId)) {
-        io.to(socketMap.get(userId)).emit("text received", aiSocketResponse);
-      } else {
-        console.log(userId);
-      }
-
-      return true;
+      return { response, code: 200 };
     } catch (error) {
       console.log(error);
       return false;
@@ -59,22 +69,64 @@ router.post("/api/messages", addUserId, async (req, res) => {
     const senderId = req.userId;
     const messageData = { ...req.body, sender: senderId };
 
-    const createdMessage = await Message.create(messageData); // synching database
-
     // finding receiver
-    const chat = await Chat.findById(createdMessage.chat);
+    const chat = await Chat.findById(req.body.chat);
     const receiver = chat.participants.find(
       (id) => senderId.toString() !== id.toString()
     );
     const receiverId = receiver.toString();
 
+    // redirecting to ai section if sent to AI
     if (receiverId === process.env.AI_ID) {
-      if (sendToAi()) {
+      const rs = await sendToAi();
+      if (rs.code === 200) {
+
+        // saving sender's text and database
+        const createdMessage = await Message.create(messageData);
+        await Chat.findByIdAndUpdate(
+          req.body?.chat,
+          { lastText: req.body.text },
+          { new: true }
+        );
+
+        // database saving
+        const aiResponse = await Message.create({
+          chat: req.body?.chat,
+          sender: process.env.AI_ID,
+          text: rs.response.text,
+        });
+
+        await Chat.findByIdAndUpdate(
+          req.body?.chat,
+          { lastText: rs.response.text },
+          { new: true }
+        );
+
+        const aiSocketResponse = await Message.findById(
+          aiResponse._id
+        ).populate("sender", "_id avatarBg username imageUrl");
+
+        // socket part
+        const userId = req.userId.toString();
+        if (socketMap.has(userId)) {
+          io.to(socketMap.get(userId)).emit("text received", aiSocketResponse);
+        } else {
+          console.log(userId);
+        }
+
         return res.status(201).json(createdMessage);
       } else {
-        return res.status(500).json({ error: "Messages fetching failed" });
+        return res.status(301).json({ error: "Quota exceeded" });
       }
     }
+
+    // synching database and last text
+    const createdMessage = await Message.create(messageData);
+    await Chat.findByIdAndUpdate(
+      req.body?.chat,
+      { lastText: req.body.text },
+      { new: true }
+    );
 
     // Prepping and sending socket response
     const emittingMessage = await Message.findById(createdMessage._id).populate(
@@ -91,6 +143,7 @@ router.post("/api/messages", addUserId, async (req, res) => {
 
   try {
     await sendToUSer();
+    // sendToAi();
   } catch (error) {
     return res.status(500).json({ error: "Messages fetching failed" });
   }

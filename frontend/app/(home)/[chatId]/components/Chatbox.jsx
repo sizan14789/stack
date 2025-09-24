@@ -46,9 +46,9 @@ export default function ChatBox() {
     );
 
     if (receiver._id === process.env.NEXT_PUBLIC_AI_ID) {
-      toast.error("Image sending to Chatbot not supported yet")
+      toast.error("Image sending to Chatbot not supported yet");
       setSendingImage(null);
-      return;     
+      return;
     }
 
     setSendingImage(null);
@@ -113,23 +113,6 @@ export default function ChatBox() {
       }
     };
 
-    // todo identify who sent
-    const syncLastText = async () => {
-      try {
-        await fetch(`/api/chats/update/${localChatInfo._id}`, {
-          method: "PUT",
-          body: JSON.stringify({ text: "Sent a photo" }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
-      } catch (error) {
-        console.log(error.message + "-at ChatBox.jsx");
-        toast.error("Last text sync failed");
-      }
-    };
-
     const syncLocalUi = () => {
       if (postBody.text) {
         const newMessage = {
@@ -167,7 +150,6 @@ export default function ChatBox() {
       const res = await handleDatabaseSync();
       if (res) {
         toast.success("Sent");
-        syncLastText();
       } else {
         toast.error("Failed at database sync");
       }
@@ -193,22 +175,6 @@ export default function ChatBox() {
     const postBody = {
       chat: localChatInfo._id,
       text: textInput,
-    };
-
-    const syncLastText = async () => {
-      try {
-        await fetch(`/api/chats/update/${localChatInfo._id}`, {
-          method: "PUT",
-          body: JSON.stringify({ text: textInput }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
-      } catch (error) {
-        console.log(error.message + "-at ChatBox.jsx");
-        toast.error("Last text sync failed");
-      }
     };
 
     const syncLastTextUi = () => {
@@ -247,12 +213,7 @@ export default function ChatBox() {
           },
           credentials: "include",
         });
-
-        if (res.status === 201) {
-          return res;
-        } else {
-          return false;
-        }
+        return res;
       } catch (error) {
         console.log(error);
       }
@@ -263,10 +224,9 @@ export default function ChatBox() {
       syncLastTextUi();
       const res = await syncDatabase();
 
-      if (res.status === 201) {
-        await syncLastText();
-      } else {
-        toast.error("Failed to send", { id: loadToaster });
+      if (res.status === 301) {
+        toast.error("Sorry, Quota exceeded");
+        toast("Your text was not saved")
       }
     } catch (error) {
       console.log(error.message + "-at ChatBox.jsx");
