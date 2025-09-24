@@ -48,7 +48,7 @@ This repo contains both frontend and backend code in separate folders:
 
 - 💬 Private chats
 
-- 🤖 Ai ChatBot (Chat GPT)
+- 🤖 Ai ChatBot (Gemini)
 
 - 🖼️ Image/file sharing
 
@@ -91,7 +91,7 @@ Frontend
 ```ini
 NEXT_PUBLIC_API_URL= http://localhost:3000
 NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME= your cloud name
-NEXT_PUBLIC_AI_ID='68d112e3e2d83f76817dff64'
+NEXT_PUBLIC_AI_ID= your chatbot id
 # not putting cloud name is also fine if u don't plan to upload profile pics
 ```
 
@@ -105,8 +105,8 @@ STAGE='dev'
 JWT_SECRET=your secret
 
 MONGO_URL=your database url
-AI_ID='68d112e3e2d83f76817dff64'
-GEMINI_API='AIzaSyAB6llbkCgNNF54Vzfqmp2SlU1q4FJNHl0'
+AI_ID= your chatbot id
+GEMINI_API= your gemini api
 # use local database for dev purposes
 
 ```
