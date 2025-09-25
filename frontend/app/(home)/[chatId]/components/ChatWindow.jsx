@@ -1,6 +1,6 @@
 import { useAppContext } from "@/context/AppContext";
 import { useChatContext } from "@/context/ChatLayoutContext";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { format } from "date-fns";
 import Image from "next/image";
 import Loading from "@/app/(home)/loading";
@@ -26,6 +26,19 @@ export default function ChatWindow() {
 
     return () => socket.off("text received");
   }, [socket]);
+
+  const textRef = useRef(null)
+
+  useEffect(() => {
+    if (textRef.current){
+      textRef.current.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "nearest",
+      });
+    }
+    console.log(textRef.current);
+  }, [localMessages]);
 
   if (!(localUser && localMessages)) return <Loading />;
   else {
@@ -60,6 +73,7 @@ export default function ChatWindow() {
                   selfSent ? "self-end flex-row-reverse" : ""
                 }`}
                 key={_id}
+                ref={index===0 ? textRef : null}
               >
                 {prevMessageSenderId !== sender._id ? (
                   <figure
