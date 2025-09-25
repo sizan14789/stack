@@ -47,12 +47,14 @@ router.post("/api/messages", addUserId, async (req, res) => {
 
       const response = await gemini.models.generateContent({
         model: "gemini-2.5-flash",
-        systemInstruction: {
-          parts: [
-            {
-              text: "You are a helpful chatbot called Sai. Your response should be to the point. Avoid over-explaining unless the user asks so. Avoid breaking line or highlighting stuff, keep them as passage like as possible",
-            },
-          ],
+        config: {
+          systemInstruction: {
+            parts: [
+              {
+                text: "You are a helpful chatbot called Sai. Your responses should be to the point. Avoid over-explaining unless the user asks. Keep answers in passage form with no highlights or forced line breaks.",
+              },
+            ],
+          },
         },
         contents: arrayForAi,
       });
@@ -80,7 +82,6 @@ router.post("/api/messages", addUserId, async (req, res) => {
     if (receiverId === process.env.AI_ID) {
       const rs = await sendToAi();
       if (rs.code === 200) {
-
         // saving sender's text and database
         const createdMessage = await Message.create(messageData);
         await Chat.findByIdAndUpdate(

@@ -21,8 +21,12 @@ router.post(
 
     const { username, email, password } = req.body;
 
-    const user = await User.findOne({ $or: [{ email }, { username }] });
-    if (user) return res.status(409).json({ error: "User already exists" });
+    const userByName = await User.findOne({ username });
+    if (userByName) return res.status(409).json({ error: "Username already exists" });
+    
+    const userByEmail = await User.findOne({ email });
+    if (userByEmail) return res.status(409).json({ error: "Email already exists" });
+
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const avatarColors = [
@@ -48,13 +52,9 @@ router.post(
         password: hashedPassword,
       });
 
-      console.log(newUser);
-
       const newChat = await Chat.create({
         participants: [ newUser._id, new mongoose.Types.ObjectId("68d112e3e2d83f76817dff64") ]
       })
-
-      console.log(newChat);
 
       const responseUser = {
         _id: newUser._id,

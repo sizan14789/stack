@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 export default function SignupForm() {
-  const router = useRouter()
+  const router = useRouter();
   const { setLocalUser } = useAppContext();
 
   const handleSignUp = async (e) => {
@@ -17,34 +17,39 @@ export default function SignupForm() {
     const signupDataUpdated = {
       ...signupData,
       username,
-      email
-    }
+      email,
+    };
     try {
-      const res = await fetch(
-        `/api/auth/signup`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(signupDataUpdated),
-          credentials: "include",
-        }
-      );
+      const res = await fetch(`/api/auth/signup`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(signupDataUpdated),
+        credentials: "include",
+      });
 
       if (res.status === 200) {
         const data = await res.json();
         setLocalUser(data);
         toast.success("Signed up");
-        router.push('/');
-        router.refresh()
+        router.push("/");
+        router.refresh();
+      } else if (res.status === 409) {
+        const data = await res.json();
+        toast.error(data?.error)
       } else {
         // console.log(res);
-        // toast.error("");
+        toast.error("Signup failed, error unknown");
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.message==="JSON.parse: unexpected character at line 1 column 1 of the JSON data"? "Server down" : error.message );
+      toast.error(
+        error.message ===
+          "JSON.parse: unexpected character at line 1 column 1 of the JSON data"
+          ? "Server down"
+          : error.message
+      );
     }
   };
 
