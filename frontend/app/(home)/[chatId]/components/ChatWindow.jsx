@@ -37,7 +37,6 @@ export default function ChatWindow() {
       inline: "nearest",
       });
     }
-    console.log(textRef.current);
   }, [localMessages]);
 
   if (!(localUser && localMessages)) return <Loading />;
