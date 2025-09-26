@@ -30,7 +30,7 @@ router.post("/api/messages", addUserId, async (req, res) => {
         { sender: 1, text: 1 }
       )
         .sort({ createdAt: -1 })
-        .limit(5);
+        .limit(100);
       recentMessages.reverse();
 
       const arrayForAi = recentMessages.map((cur) => {
@@ -46,22 +46,16 @@ router.post("/api/messages", addUserId, async (req, res) => {
       });
 
       const response = await gemini.models.generateContent({
-        model: "gemini-2.5-flash",
+        model: "gemini-2.5-flash-lite",
         config: {
-          systemInstruction: {
-            parts: [
-              {
-                text: "You are a helpful chatbot called Sai. Your responses should be to the point. Avoid over-explaining unless the user asks. Keep answers in passage form with no highlights or forced line breaks.",
-              },
-            ],
-          },
+          systemInstruction: "You are an AI assistant called Neko. You are not allowed to use markdown of any kind",
         },
         contents: arrayForAi,
       });
 
       return { response, code: 200 };
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.log(err);
       return false;
     }
   };
@@ -112,7 +106,7 @@ router.post("/api/messages", addUserId, async (req, res) => {
         if (socketMap.has(userId)) {
           io.to(socketMap.get(userId)).emit("text received", aiSocketResponse);
         } else {
-          console.log(userId);
+          // console.log(userId);
         }
 
         return res.status(201).json(createdMessage);
