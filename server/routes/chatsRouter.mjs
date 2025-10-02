@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { addUserId, verifyToken } from "../middlewares/verifyUser.mjs";
 import Chat from "../models/Chat.mjs";
+import Message from "../models/Message.mjs";
+import { io, socketMap } from "../index.mjs";
 
 const router = Router();
 
@@ -20,9 +22,11 @@ router.get("/api/chats", addUserId, async (req, res) => {
 router.post("/api/chats", addUserId, async (req, res) => {
   try {
     const participants = [req.body?.partner, req.userId];
-    const chatExists = await Chat.findOne({ participants: { $all: participants } });
-    if(chatExists){
-      return res.status(205).json(chatExists)
+    const chatExists = await Chat.findOne({
+      participants: { $all: participants },
+    });
+    if (chatExists) {
+      return res.status(205).json(chatExists);
     }
     const createdChat = await Chat.create({ participants });
     const chat = await Chat.findById(createdChat._id).populate(
@@ -62,6 +66,41 @@ router.put("/api/chats/update/:chatId", verifyToken, async (req, res) => {
     res.status(201).json(updatedChat);
   } catch (error) {
     return res.status(500).json({ error: "Sync Failed" });
+  }
+});
+
+// read Purpose
+router.put("/api/chats/read", addUserId, async (req, res) => {
+  try {
+    const latestMessage = await Message.findOne({ chat: req.body._id }).sort({
+      createdAt: -1,
+    });
+
+    const updatedMessages = await Message.updateMany(
+      {
+        chat: req.body._id,
+        createdAt: { $lte: latestMessage.createdAt },
+        read: false,
+      },
+      {
+        $set: { read: true },
+      }
+    );
+
+    const receiverId = req.userId;
+    const { participants } = req.body;
+    
+    const sender = participants.find(
+      (id) => receiverId.toString() !== id._id
+    );
+
+    if (socketMap.has(sender._id)) {
+      io.to(socketMap.get(sender._id)).emit("read", latestMessage);
+    }
+
+    return res.sendStatus(205);
+  } catch (error) {
+    res.status(500).json({ error: "Internal error" });
   }
 });
 

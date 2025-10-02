@@ -1,20 +1,23 @@
 import { useAppContext } from "@/context/AppContext";
 import { useChatContext } from "@/context/ChatLayoutContext";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
 import Image from "next/image";
 import Loading from "@/app/(home)/loading";
+import { TiTick } from "react-icons/ti";
+import { TiTickOutline } from "react-icons/ti";
 
 export default function ChatWindow() {
   const { socket, localUser, setLocalChatsList } = useAppContext();
-  const { localMessages, setLocalMessages } = useChatContext();
+  const { localMessages, localChatInfo, setLocalMessages } = useChatContext();
+  const [lastComingText, setLastComingText] = useState({});
 
   useEffect(() => {
     if (!socket) return;
 
-    socket.on("text received", (text) => {
+    socket.on("text received", async (text) => {
       setLocalMessages((prev) => [text, ...prev]);
-      console.log(text);
+      setLastComingText(text);
 
       setLocalChatsList((prev) =>
         prev.map((cur) => {
@@ -24,20 +27,60 @@ export default function ChatWindow() {
       );
     });
 
+    socket.on("read", async (text) => {
+      setLocalMessages((prev) =>
+        prev.map((message) => ({
+          ...message,
+          read: true,
+        }))
+      );
+    });
+
     return () => socket.off("text received");
   }, [socket]);
 
-  const textRef = useRef(null)
+  const textRef = useRef(null);
 
   useEffect(() => {
-    if (textRef.current){
+    if (textRef.current) {
       textRef.current.scrollIntoView({
-      behavior: "smooth",
-      block: "center",
-      inline: "nearest",
+        behavior: "smooth",
+        block: "center",
+        inline: "nearest",
       });
     }
   }, [localMessages]);
+
+  useEffect(() => {
+    const syncSeen = async () => {
+      const res = await fetch("/api/messages/read", {
+        method: "put",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(lastComingText),
+        credentials: "include",
+      });
+    };
+    syncSeen();
+  }, [lastComingText]);
+
+  useEffect(() => {
+    // console.log(localChatInfo);
+    if (Object.keys(localChatInfo).length === 0) return;
+
+    const syncSeen = async () => {
+      const res = await fetch("/api/chats/read", {
+        method: "put",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(localChatInfo),
+        credentials: "include",
+      });
+    };
+    syncSeen();
+  }, [localChatInfo]);
 
   if (!(localUser && localMessages)) return <Loading />;
   else {
@@ -72,7 +115,7 @@ export default function ChatWindow() {
                   selfSent ? "self-end flex-row-reverse" : ""
                 }`}
                 key={_id}
-                ref={index===0 ? textRef : null}
+                ref={index === 0 ? textRef : null}
               >
                 {prevMessageSenderId !== sender._id ? (
                   <figure
@@ -134,7 +177,8 @@ export default function ChatWindow() {
                   >
                     <p className="break-words">
                       <span>{text}</span>
-                      <span className="float-right mt-2 ml-4 mb-1 !text-[.5rem]  sm:!text-[.6rem] self-end whitespace-nowrap text-secondary">
+                      <span className="float-right flex gap-1 items-center mt-2 ml-4 mb-1 !text-[.5rem]  sm:!text-[.6rem] self-end whitespace-nowrap text-secondary">
+                        {read && selfSent ? <span className="text-[.7rem] text-[var(--accent)] ">seen</span> : <></>}
                         {textTime}
                       </span>
                     </p>

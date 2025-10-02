@@ -48,7 +48,8 @@ router.post("/api/messages", addUserId, async (req, res) => {
       const response = await gemini.models.generateContent({
         model: "gemini-2.5-flash-lite",
         config: {
-          systemInstruction: "You are an AI assistant called Neko. You are not allowed to use markdown of any kind",
+          systemInstruction:
+            "You are an AI assistant called Neko. You are not allowed to use markdown of any kind",
         },
         contents: arrayForAi,
       });
@@ -141,6 +142,41 @@ router.post("/api/messages", addUserId, async (req, res) => {
     // sendToAi();
   } catch (error) {
     return res.status(500).json({ error: "Messages fetching failed" });
+  }
+});
+
+// router for read messages
+router.put("/api/messages/read", addUserId, async (req, res) => {
+  try {
+    const updatedMessages = await Message.updateMany(
+      {
+        chat: req.body.chat,
+        createdAt: { $lte: req.body.createdAt },
+        read: false,
+      },
+      {
+        $set: { read: true },
+      }
+    );
+
+    const chat = await Chat.findById(req.body.chat).populate("participants", "_id");
+    
+    const participants = chat.participants;
+    const receiver = req.userId.toString();
+
+    const readRecipient = participants.find(
+      (each) => receiver.toString() !== each._id
+    );
+
+    const readRecipientId = readRecipient._id.toString();
+
+    if (socketMap.has(readRecipientId)) {
+      io.to(socketMap.get(readRecipientId)).emit("read", {});
+    }
+
+    return res.sendStatus(205);
+  } catch (error) {
+    res.status(500).json({ error: "Internal error" });
   }
 });
 
