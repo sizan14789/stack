@@ -159,13 +159,16 @@ router.put("/api/messages/read", addUserId, async (req, res) => {
       }
     );
 
+    if(!req.body) return res.status(404).json({error: "Not body"});
+    if(!req.body.chat) return res.status(404).json({error: "Not body"});
+
     const chat = await Chat.findById(req.body.chat).populate("participants", "_id");
     
     const participants = chat.participants;
     const receiver = req.userId.toString();
 
     const readRecipient = participants.find(
-      (each) => receiver.toString() !== each._id
+      (each) => receiver.toString() !== each._id.toString()
     );
 
     const readRecipientId = readRecipient._id.toString();
@@ -176,6 +179,7 @@ router.put("/api/messages/read", addUserId, async (req, res) => {
 
     return res.sendStatus(205);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Internal error" });
   }
 });

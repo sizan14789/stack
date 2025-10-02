@@ -66,10 +66,13 @@ export default function ChatWindow() {
   }, [lastComingText]);
 
   useEffect(() => {
+    if (!localChatInfo) return;
     // console.log(localChatInfo);
+    if(!localChatInfo.participants) return;
     if (Object.keys(localChatInfo).length === 0) return;
 
     const syncSeen = async () => {
+      console.log(localChatInfo);
       const res = await fetch("/api/chats/read", {
         method: "put",
         headers: {
@@ -117,7 +120,9 @@ export default function ChatWindow() {
                 key={_id}
                 ref={index === 0 ? textRef : null}
               >
-                {prevMessageSenderId !== sender._id ? (
+                {selfSent ? (
+                  <></>
+                ) : prevMessageSenderId !== sender._id ? (
                   <figure
                     className="h-[2rem] sm:h-[2.5rem] min-w-[2rem] sm:min-w-[2.5rem] max-w-[2rem] sm:max-w-[2.5rem] flex justify-center items-center rounded-full overflow-hidden"
                     style={{ backgroundColor: sender.avatarBg }}
@@ -177,8 +182,14 @@ export default function ChatWindow() {
                   >
                     <p className="break-words">
                       <span>{text}</span>
-                      <span className="float-right flex gap-1 items-center mt-2 ml-4 mb-1 !text-[.5rem]  sm:!text-[.6rem] self-end whitespace-nowrap text-secondary">
-                        {read && selfSent ? <span className="text-[.7rem] text-[var(--accent)] ">seen</span> : <></>}
+                      <span className="float-right flex gap-1 items-center mt-2 ml-4 mb-1  sm:!text-[.6rem] self-end whitespace-nowrap text-secondary">
+                        {read && selfSent ? (
+                          <span className="text-[.6rem] text-[var(--accent)] ">
+                            Seen
+                          </span>
+                        ) : (
+                          <></>
+                        )}
                         {textTime}
                       </span>
                     </p>

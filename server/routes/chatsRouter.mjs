@@ -87,12 +87,12 @@ router.put("/api/chats/read", addUserId, async (req, res) => {
       }
     );
 
+    if (!req.body.participants) return res.status(404).json({ error: "note found" });
+
     const receiverId = req.userId;
     const { participants } = req.body;
     
-    const sender = participants.find(
-      (id) => receiverId.toString() !== id._id
-    );
+    const sender = participants.find((id) => receiverId.toString() !== id._id);
 
     if (socketMap.has(sender._id)) {
       io.to(socketMap.get(sender._id)).emit("read", latestMessage);
