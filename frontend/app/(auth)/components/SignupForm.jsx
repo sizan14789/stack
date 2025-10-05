@@ -37,8 +37,12 @@ export default function SignupForm() {
         router.refresh();
       } else if (res.status === 409) {
         const data = await res.json();
-        toast.error(data?.error)
-      } else {
+        toast.error(data?.error) 
+      }else if (res.status === 400) {
+        const data = await res.json();
+        toast.error(data?.error) 
+      }
+      else {
         // console.log(res);
         toast.error("Signup failed, error unknown");
       }

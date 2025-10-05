@@ -52,6 +52,8 @@ This repo contains both frontend and backend code in separate folders:
 
 - 🖼️ Image/file sharing
 
+- Read recipients
+
 - 📱 Responsive UI with TailwindCSS
 
 <br />

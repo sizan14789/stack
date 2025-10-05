@@ -17,7 +17,7 @@ router.post(
   async (req, res) => {
     const validationError = validationResult(req);
     if (!validationError.isEmpty())
-      return res.status(400).json({ error: "Validation error" });
+      return res.status(400).json({ error: "Invalid "+validationError.array()[0].path });
 
     const { username, email, password } = req.body;
 
@@ -83,7 +83,6 @@ router.post(
       return res.status(200).json(responseUser);
     } catch (error) {
       console.log(error);
-    
       return res.status(500).json({ error: "Signup Failed" });
     }
   }
