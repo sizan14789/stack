@@ -4,8 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
 import Image from "next/image";
 import Loading from "@/app/(home)/loading";
-import { TiTick } from "react-icons/ti";
-import { TiTickOutline } from "react-icons/ti";
 
 export default function ChatWindow() {
   const { socket, localUser, setLocalChatsList } = useAppContext();

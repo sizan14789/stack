@@ -40,15 +40,15 @@ export default function ChatBox() {
       return;
     }
 
-    const receiver = localChatInfo.participants.find(
-      (cur) => cur._id !== localUser._id
-    );
+    // const receiver = localChatInfo.participants.find(
+    //   (cur) => cur._id !== localUser._id
+    // );
 
-    if (receiver._id === process.env.NEXT_PUBLIC_AI_ID) {
-      toast.error("Image sending to Chatbot not supported yet");
-      setSendingImage(null);
-      return;
-    }
+    // if (receiver._id === process.env.NEXT_PUBLIC_AI_ID) {
+    //   toast.error("Image sending to Chatbot not supported yet");
+    //   setSendingImage(null);
+    //   return;
+    // }
 
     setSendingImage(null);
 
